@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实现全选复选框问题</title>
+    <script src="js/jquery-1.7.2.js"></script>
+    <script src="js/angular.js"></script>
+    <script>
+        angular.module("myApp",[])
+                .controller("mainCtrl", function ($scope) {
+                    $scope.selectAll=true;
+                    $scope.all= function (m) {
+                        for(var i=0;i<$scope.persons.length;i++){
+                            if(m===true){
+                                $scope.persons[i].state=true;
+                            }else {
+                                $scope.persons[i].state=false;
+                            }
+                        }
+                    };
+                    $scope.persons=[
+                        {name:"a",state:true},
+                        {name:"b",state:true},
+                        {name:"c",state:true},
+                        {name:"d",state:true}
+                    ]
+                });
+    </script>
+</head>
+<body ng-app="myApp">
+<div ng-controller="mainCtrl">
+    <label>全选<input type="checkbox" ng-model="selectAll" ng-click="all(selectAll)"></label><br/>
+    <div ng-repeat="person in persons">
+        <label>{{person.name}}:<input type="checkbox" ng-checked="selectAll" ng-model="person.state"> </label><br/>
+    </div>
+    <div>selectAll : {{selectAll}}</div>
+    <div ng-repeat="person in persons">
+        {{person.name}} : {{person.state}}
+    </div>
+</div>
+<script src="checkbox.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        span{position: absolute;top: 100px;height:50px;width:100px;background:red;visibility:visible;}
+
+
+    </style>
+    <script>
+        window.onload=function(){
+            var oSpan=document.getElementsByTagName('span')[0];
+            var oInput=document.getElementsByTagName('input')[0];
+            oSpan.onclick=function(){
+                oInput.focus();
+            }
+        }
+    </script>
+</head>
+<body>
+    <input type="text">
+    <span>2222222222</span>
+</body>
+</html>

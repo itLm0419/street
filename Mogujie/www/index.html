@@ -1,0 +1,2185 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="Car">
+<head>
+    <meta charset="UTF-8">
+    <title>蘑菇街-我的买手街</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="images/icon.ico">
+    <!--<link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">-->
+    <script src="js/cookie.js"></script>
+    <script src="js/move.js"></script>
+    <script src="js/jquery-1.7.2.js"></script>
+    <script src="js/jquery.fly.min.js"></script>
+    <script src="js/angular.js"></script>
+    <script src="js/index.js"></script>
+    <script>
+        var Car=angular.module('Car',[]);
+        Car.controller('buyCar',function ($scope){
+            $scope.data=[];
+            $scope.add=function ($event){
+                var name=$($event.target).parent().parent().next().next().children(0).html();
+                var src=$($event.target).parent().parent().next().children(0).attr('src');
+                var price=$($event.target).parent().parent().next().next().children().eq(1).html();
+                price=parseInt(price.substring(1));
+                $scope.data.push({name:name,src:src,price:price,count:1,check:false});
+
+            };
+            $scope.selectAll=false;
+            $scope.select=false;
+            $scope.checke=function($event,item){
+                if($($event.target).get(0).checked){
+                    item.check=true;
+                }else {
+                    item.check=false;
+                }
+                var n=0;
+               /* angular.forEach($scope.data,function (item,index){
+                    if(item.check){
+                        n++;
+                        alert(n);
+                    }
+                });*/
+                for(var i=0;i<$scope.data.length;i++){
+                    if($scope.data[i].check){
+                        n++;
+                    }
+                }
+                if(n==$scope.data.length){
+                    $scope.select=true;
+                }else{
+                    $scope.select=false;
+                }
+            };
+            $scope.sum=function(){
+                var res=0;
+                angular.forEach($scope.data,function (item,index){
+                    if(item.check){
+                        res+=item.price*item.count;
+                    }
+                });
+                return res;
+            };
+            $scope.del=function(i){
+                $scope.data.splice(i,1);
+                var n=0;
+                angular.forEach($scope.data,function (item,index){
+                    if(item.check){
+                        n++;
+                    }
+                });
+                if(n==$scope.data.length){
+                    $scope.select=true;
+                }else{
+                    $scope.select=false;
+                }
+
+            }
+            $scope.all= function (m) {
+                if(m==true){
+                    angular.forEach($scope.data,function(item,index){
+                        item.check=true;
+                    });
+                }else{
+                    angular.forEach($scope.data,function(item,index){
+                        item.check=false;
+                    });
+                }
+            };
+        });
+    </script>
+</head>
+<body ng-controller="buyCar">
+    <div id="mark"></div>
+    <div class="buyCar">
+        <div class="Car">
+            <ul>
+                <li id="tab">
+                    <p><input class="all" type="checkbox" ng-checked="select" ng-model="selectAll" ng-click="all(selectAll)">全选</p>
+                    <!--  ng-checked="selectAll"-->
+                    <p id="spt">商品</p>
+                    <p>单价</p>
+                    <p>数量</p>
+                    <p>小计</p>
+                    <p>操作</p>
+                </li>
+                <li ng-repeat="item in data">
+                    <p><input class="choose" type="checkbox" ng-click="checke($event,item)" ng-checked="item.check"></p>
+                    <p id="sp">
+                        <img src={{item.src}} alt="" />
+                        <span>{{item.name}}</span>
+                    </p>
+                    <p>{{item.price}}</p>
+                    <p>
+                        <input type="number" min="0" max="6" ng-model="item.count">
+                    </p>
+                    <p style="background: #fff;">{{item.count*item.price|currency:'&yen;'}}</p>
+                    <p><a href="javascript:;" ng-click="del($index)">删除</a></p>
+                </li>
+                <li id="foot">
+                    <p><input class="all" type="checkbox" ng-checked="select" ng-model="selectAll" ng-click="all(selectAll)">全选</p>
+                    <!-- ng-model="selectAll"-->
+                    <p><a href="javascript:;">删除</a></p>
+                    <p style="background: #fff;">
+                        合计：{{sum()|currency:'&yen;'}}
+                    </p>
+                    <p>结算</p>
+                </li>
+            </ul>
+            <input type="button" value="回去添加宝贝" id="back">
+        </div>
+    </div>
+    <!--吸顶条-->
+    <div class="mark">
+        <div class="search">
+            <div class="logo">
+                <h1><img src="images/log.png"></h1>
+            </div>
+            <div class="sch clearfix">
+                <ul>
+                    <li class="sch_li1">
+                        <a href="javascript:;"><p>搜商品</p><img src="images/san.png"></a>
+                        <span>
+                            <a href="javascript:;">商品</a>
+                            <a href="javascript:;">店铺</a>
+                        </span>
+                    </li>
+                    <li class="sch_li3"><a href="javascript:;"><img src="images/searchs.png" alt=""></a></li>
+                </ul>
+                <input type="text">
+                <span>秋季时装新品套装</span>
+            </div>
+        </div>
+    </div>
+    <!--吸顶条结束-->
+
+    <div class="floor">
+        <ul>
+            <li id="pos"></li>
+            <li><a href="#model1">蘑菇良品</a></li>
+            <li><a href="#model2">品牌站</a></li>
+            <li><a href="#model3">潮流女装</a></li>
+            <li><a href="#model4">人气女鞋</a></li>
+            <li><a href="#model5">男友潮搭</a></li>
+            <li><a href="#model6">箱包配饰</a></li>
+            <li><a href="#model7">运动瘦身</a></li>
+            <li><a href="#model8">时尚美妆</a></li>
+            <li><a href="#model9">家居生活</a></li>
+            <li><a href="#model10">辣妈潮宝</a></li>
+            <li><a href="#model11">吃心绝对</a></li>
+        </ul>
+    </div>
+
+
+    <!--右侧边栏-->
+    <div class="nav_rigth">
+        <ul>
+            <li>
+                <a href="javascript:;"><i id="end"></i>购物车</a>
+                <div>我的购物车<span class="sanjiao"></span></div>
+            </li>
+            <li>
+                <a href="javascript:;"><i></i>优惠券</a>
+                <div>我的优惠券<span class="sanjiao"></span></div>
+            </li>
+            <li>
+                <a href="javascript:;"><i id="end2"></i>关注</a>
+                <div>我完美关注<span class="sanjiao"></span></div>
+            </li>
+            <li>
+                <a href="javascript:;"><i></i>足迹</a>
+                <div>我的小脚印<span class="sanjiao"></span></div>
+            </li>
+        </ul>
+        <span><p><i></i>TOP</p></span>
+        <div id="msg"></div>
+        <div id="msg2"></div>
+    </div>
+    <!--右侧边栏结束-->
+
+    <div id="btop" class="clearfix">
+        <div class="btop clearfix">
+            <div class="clearfix">
+                <a href="#"><span></span><p>蘑菇街首页</p></a>
+            </div>
+            <ul>
+                <li class="cookie clearfix" id="LR">
+                    <a href="reg.html">注册</a>
+                    <a href="login.html">登录</a>
+                </li>
+                <li>
+                    <a href="javascript:;">我的订单</a>
+                    <ol>
+                        <li><a href="javascript:;">管理后台</a></li>
+                        <li><a href="javascript:;">商家社区</a></li>
+                        <li><a href="javascript:;">商家培训</a></li>
+                        <li><a href="javascript:;">市场入驻</a></li>
+                    </ol>
+                </li>
+                <li id="GW">
+                    <a href="javascript:;">购物车</a>
+                </li>
+                <li>
+                    <a href="javascript:;">客户服务</a>
+                    <ol>
+                        <li><a href="javascript:;">管理后台</a></li>
+                        <li><a href="javascript:;">商家社区</a></li>
+                        <li><a href="javascript:;">商家培训</a></li>
+                        <li><a href="javascript:;">市场入驻</a></li>
+                    </ol>
+                </li>
+                <li>
+                    <a href="javascript:;">我的小店</a>
+                    <ol>
+                        <li><a href="javascript:;">管理后台</a></li>
+                        <li><a href="javascript:;">商家社区</a></li>
+                        <li><a href="javascript:;">商家培训</a></li>
+                        <li><a href="javascript:;">市场入驻</a></li>
+                    </ol>
+                </li>
+            </ul>
+        </div><!--.top结束-->
+    </div><!--#top结束-->
+    <div id="search">
+        <div class="search">
+            <div class="logo">
+                <h1><img src="images/logo.png"></h1>
+            </div>
+            <div class="sch clearfix">
+                <ul>
+                    <li class="sch_li1">
+                        <a href="javascript:;"><p>搜商品</p><img src="images/san.png"></a>
+                        <span>
+                            <a href="javascript:;">商品</a>
+                            <a href="javascript:;">店铺</a>
+                        </span>
+                    </li>
+                    <li class="sch_li3"><a href="javascript:;"><img src="images/search.png" alt=""></a></li>
+                </ul>
+                <input type="text">
+                <span>秋季时装新品套装</span>
+            </div>
+            <div class="nav">
+                <ul>
+                    <li><a href="javascript:;">韩版连衣裙</a></li>
+                    <li><a href="javascript:;">小白鞋</a></li>
+                    <li><a href="javascript:;">潮T</a></li>
+                    <li><a href="javascript:;">运动套装</a></li>
+                    <li><a href="javascript:;">男T恤</a></li>
+                    <li><a href="javascript:;">夏季小包</a></li>
+                    <li><a href="javascript:;">短裤</a></li>
+                    <li><a href="javascript:;">衬衫</a></li>
+                    <li><a href="javascript:;">省心套装</a></li>
+                </ul>
+            </div>
+            <div>
+                <img src="images/E.png" width="220" height="90" alt="">
+            </div>
+        </div><!--.search结束-->
+    </div><!--#search结束-->
+    <div id="ad" class="clearfix">
+        <div class="ad">
+           <div class="nav_list">
+               <ul>
+                   <li class="home">全部商品</li>
+                   <li><a href="javascript:;">团购</a></li>
+                   <li><a href="javascript:;">快抢</a></li>
+               </ul>
+           </div>
+           <div class="ad_left">
+               <ul>
+                   <li>
+                       <dl>
+                           <dt><a href="javascript:;">上衣</a></dt>
+                           <dd>
+                               <span>
+                                   <a class="flag" href="javascript:;">秋上衣</a>
+                                   <a href="javascript:;">衬衣</a>
+                                   <a href="javascript:;">针织衫</a>
+                               </span>
+                           </dd>
+                       </dl>
+                       <div>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">初秋热卖</a></dt>
+                               <dd>
+                                   <a class="flag" href="javascript:;">卫衣</a>
+                                   <a href="javascript:;">时尚套装</a>
+                                   <a href="javascript:;">棒球外套</a>
+                                   <a class="flag" href="javascript:;">风衣</a>
+                                   <a href="javascript:;">牛仔外套</a>
+                                   <a href="javascript:;">皮衣</a>
+                                   <a href="javascript:;">薄外套</a>
+                                   <a href="javascript:;">开衫</a>
+                                   <a href="javascript:;">马甲</a>
+                                   <a href="javascript:;">毛呢外套</a>
+                                   <a href="javascript:;">毛衣</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">换季热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">T恤</a>
+                                   <a href="javascript:;">雪纺衫</a>
+                                   <a href="javascript:;">蕾丝衫</a>
+                                   <a href="javascript:;">衬衫</a>
+                                   <a href="javascript:;">吊带背心</a>
+                                   <a href="javascript:;">娃娃衫</a>
+                                   <a href="javascript:;">针织薄衫</a>
+                                   <a href="javascript:;">情侣衫</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">潮流新品</a></dt>
+                               <dd>
+                                   <a href="javascript:;">短款上衣</a>
+                                   <a href="javascript:;">喇叭衫</a>
+                                   <a href="javascript:;">纯白衬衫</a>
+                                   <a href="javascript:;">红色T恤</a>
+                                   <a href="javascript:;">一字领</a>
+                                   <a href="javascript:;">时尚挂脖</a>
+                                   <a href="javascript:;">绑带衬衫</a>
+                                   <a href="javascript:;">甜美荷叶边</a>
+                                   <a href="javascript:;">前短后长</a>
+                               </dd>
+                           </dl>
+                           <a href="javascript:;"><img src="images/nav_1.jpg" alt=""></a>
+                       </div>
+                   </li>
+                   <li>
+                       <dl>
+                           <dt><a href="javascript:;">上衣</a></dt>
+                           <dd>
+                               <span>
+                                   <a href="javascript:;">秋上衣</a>
+                                   <a href="javascript:;">衬衣</a>
+                                   <a href="javascript:;">针织衫</a>
+                               </span>
+                           </dd>
+                       </dl>
+                       <div>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">初秋热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">卫衣</a>
+                                   <a href="javascript:;">时尚套装</a>
+                                   <a href="javascript:;">棒球外套</a>
+                                   <a href="javascript:;">风衣</a>
+                                   <a href="javascript:;">牛仔外套</a>
+                                   <a href="javascript:;">皮衣</a>
+                                   <a href="javascript:;">薄外套</a>
+                                   <a href="javascript:;">开衫</a>
+                                   <a href="javascript:;">马甲</a>
+                                   <a href="javascript:;">毛呢外套</a>
+                                   <a href="javascript:;">毛衣</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">换季热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">T恤</a>
+                                   <a href="javascript:;">雪纺衫</a>
+                                   <a href="javascript:;">蕾丝衫</a>
+                                   <a href="javascript:;">衬衫</a>
+                                   <a href="javascript:;">吊带背心</a>
+                                   <a href="javascript:;">娃娃衫</a>
+                                   <a href="javascript:;">针织薄衫</a>
+                                   <a href="javascript:;">情侣衫</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">潮流新品</a></dt>
+                               <dd>
+                                   <a href="javascript:;">短款上衣</a>
+                                   <a href="javascript:;">喇叭衫</a>
+                                   <a href="javascript:;">纯白衬衫</a>
+                                   <a href="javascript:;">红色T恤</a>
+                                   <a href="javascript:;">一字领</a>
+                                   <a href="javascript:;">时尚挂脖</a>
+                                   <a href="javascript:;">绑带衬衫</a>
+                                   <a href="javascript:;">甜美荷叶边</a>
+                                   <a href="javascript:;">前短后长</a>
+                               </dd>
+                           </dl>
+                           <a href="javascript:;"><img src="images/nav_2.jpg" alt=""></a>
+                       </div>
+                   </li>
+                   <li>
+                       <dl>
+                           <dt><a href="javascript:;">上衣</a></dt>
+                           <dd>
+                               <span>
+                                   <a href="javascript:;">秋上衣</a>
+                                   <a href="javascript:;">衬衣</a>
+                                   <a href="javascript:;">针织衫</a>
+                               </span>
+                           </dd>
+                       </dl>
+                       <div>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">初秋热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">卫衣</a>
+                                   <a href="javascript:;">时尚套装</a>
+                                   <a href="javascript:;">棒球外套</a>
+                                   <a class="flag" href="javascript:;">风衣</a>
+                                   <a href="javascript:;">牛仔外套</a>
+                                   <a class="flag" href="javascript:;">皮衣</a>
+                                   <a href="javascript:;">薄外套</a>
+                                   <a href="javascript:;">开衫</a>
+                                   <a class="flag" href="javascript:;">马甲</a>
+                                   <a href="javascript:;">毛呢外套</a>
+                                   <a href="javascript:;">毛衣</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">换季热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">T恤</a>
+                                   <a class="flag" href="javascript:;">雪纺衫</a>
+                                   <a href="javascript:;">蕾丝衫</a>
+                                   <a href="javascript:;">衬衫</a>
+                                   <a href="javascript:;">吊带背心</a>
+                                   <a class="flag" href="javascript:;">娃娃衫</a>
+                                   <a href="javascript:;">针织薄衫</a>
+                                   <a href="javascript:;">情侣衫</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">潮流新品</a></dt>
+                               <dd>
+                                   <a href="javascript:;">短款上衣</a>
+                                   <a class="flag" href="javascript:;">喇叭衫</a>
+                                   <a href="javascript:;">纯白衬衫</a>
+                                   <a href="javascript:;">红色T恤</a>
+                                   <a href="javascript:;">一字领</a>
+                                   <a href="javascript:;">时尚挂脖</a>
+                                   <a class="flag" href="javascript:;">绑带衬衫</a>
+                                   <a href="javascript:;">甜美荷叶边</a>
+                                   <a href="javascript:;">前短后长</a>
+                               </dd>
+                           </dl>
+                           <a href="javascript:;"><img src="images/nav_6.jpg" alt=""></a>
+                       </div>
+                   </li>
+                   <li>
+                       <dl>
+                           <dt><a href="javascript:;">上衣</a></dt>
+                           <dd>
+                               <span>
+                                   <a href="javascript:;">秋上衣</a>
+                                   <a class="flag" href="javascript:;">衬衣</a>
+                                   <a href="javascript:;">针织衫</a>
+                               </span>
+                           </dd>
+                       </dl>
+                       <div>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">初秋热卖</a></dt>
+                               <dd>
+                                   <a class="flag" href="javascript:;">卫衣</a>
+                                   <a href="javascript:;">时尚套装</a>
+                                   <a class="flag" href="javascript:;">棒球外套</a>
+                                   <a href="javascript:;">风衣</a>
+                                   <a class="flag" href="javascript:;">牛仔外套</a>
+                                   <a href="javascript:;">皮衣</a>
+                                   <a href="javascript:;">薄外套</a>
+                                   <a class="flag" href="javascript:;">开衫</a>
+                                   <a href="javascript:;">马甲</a>
+                                   <a href="javascript:;">毛呢外套</a>
+                                   <a href="javascript:;">毛衣</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">换季热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">T恤</a>
+                                   <a class="flag" href="javascript:;">雪纺衫</a>
+                                   <a href="javascript:;">蕾丝衫</a>
+                                   <a href="javascript:;">衬衫</a>
+                                   <a class="flag" href="javascript:;">吊带背心</a>
+                                   <a href="javascript:;">娃娃衫</a>
+                                   <a href="javascript:;">针织薄衫</a>
+                                   <a href="javascript:;">情侣衫</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">潮流新品</a></dt>
+                               <dd>
+                                   <a class="flag" href="javascript:;">短款上衣</a>
+                                   <a href="javascript:;">喇叭衫</a>
+                                   <a href="javascript:;">纯白衬衫</a>
+                                   <a class="flag" href="javascript:;">红色T恤</a>
+                                   <a href="javascript:;">一字领</a>
+                                   <a href="javascript:;">时尚挂脖</a>
+                                   <a href="javascript:;">绑带衬衫</a>
+                                   <a class="flag" href="javascript:;">甜美荷叶边</a>
+                                   <a href="javascript:;">前短后长</a>
+                               </dd>
+                           </dl>
+                           <a href="javascript:;"><img src="images/nav_4.jpg" alt=""></a>
+                       </div>
+                   </li>
+                   <li>
+                       <dl>
+                           <dt><a href="javascript:;">上衣</a></dt>
+                           <dd>
+                               <span>
+                                   <a class="flag" href="javascript:;">秋上衣</a>
+                                   <a href="javascript:;">衬衣</a>
+                                   <a href="javascript:;">针织衫</a>
+                               </span>
+                           </dd>
+                       </dl>
+                       <div>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">初秋热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">卫衣</a>
+                                   <a href="javascript:;">时尚套装</a>
+                                   <a href="javascript:;">棒球外套</a>
+                                   <a class="flag" href="javascript:;">风衣</a>
+                                   <a href="javascript:;">牛仔外套</a>
+                                   <a class="flag" href="javascript:;">皮衣</a>
+                                   <a href="javascript:;">薄外套</a>
+                                   <a href="javascript:;">开衫</a>
+                                   <a class="flag" href="javascript:;">马甲</a>
+                                   <a href="javascript:;">毛呢外套</a>
+                                   <a href="javascript:;">毛衣</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">换季热卖</a></dt>
+                               <dd>
+                                   <a class="flag" href="javascript:;">T恤</a>
+                                   <a href="javascript:;">雪纺衫</a>
+                                   <a href="javascript:;">蕾丝衫</a>
+                                   <a class="flag" href="javascript:;">衬衫</a>
+                                   <a href="javascript:;">吊带背心</a>
+                                   <a class="flag" href="javascript:;">娃娃衫</a>
+                                   <a href="javascript:;">针织薄衫</a>
+                                   <a href="javascript:;">情侣衫</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">潮流新品</a></dt>
+                               <dd>
+                                   <a class="flag" href="javascript:;">短款上衣</a>
+                                   <a href="javascript:;">喇叭衫</a>
+                                   <a href="javascript:;">纯白衬衫</a>
+                                   <a class="flag" href="javascript:;">红色T恤</a>
+                                   <a href="javascript:;">一字领</a>
+                                   <a class="flag" href="javascript:;">时尚挂脖</a>
+                                   <a href="javascript:;">绑带衬衫</a>
+                                   <a href="javascript:;">甜美荷叶边</a>
+                                   <a class="flag" href="javascript:;">前短后长</a>
+                               </dd>
+                           </dl>
+                           <a href="javascript:;"><img src="images/nav_5.jpg" alt=""></a>
+                       </div>
+                   </li>
+                   <li>
+                       <dl>
+                           <dt><a href="javascript:;">上衣</a></dt>
+                           <dd>
+                               <span>
+                                   <a href="javascript:;">秋上衣</a>
+                                   <a href="javascript:;">衬衣</a>
+                                   <a class="flag" href="javascript:;">针织衫</a>
+                               </span>
+                           </dd>
+                       </dl>
+                       <div>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">初秋热卖</a></dt>
+                               <dd>
+                                   <a class="flag" href="javascript:;">卫衣</a>
+                                   <a href="javascript:;">时尚套装</a>
+                                   <a href="javascript:;">棒球外套</a>
+                                   <a class="flag" href="javascript:;">风衣</a>
+                                   <a href="javascript:;">牛仔外套</a>
+                                   <a href="javascript:;">皮衣</a>
+                                   <a class="flag" href="javascript:;">薄外套</a>
+                                   <a href="javascript:;">开衫</a>
+                                   <a href="javascript:;">马甲</a>
+                                   <a href="javascript:;">毛呢外套</a>
+                                   <a class="flag" href="javascript:;">毛衣</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">换季热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">T恤</a>
+                                   <a class="flag" href="javascript:;">雪纺衫</a>
+                                   <a href="javascript:;">蕾丝衫</a>
+                                   <a href="javascript:;">衬衫</a>
+                                   <a href="javascript:;">吊带背心</a>
+                                   <a href="javascript:;">娃娃衫</a>
+                                   <a class="flag" href="javascript:;">针织薄衫</a>
+                                   <a href="javascript:;">情侣衫</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">潮流新品</a></dt>
+                               <dd>
+                                   <a href="javascript:;">短款上衣</a>
+                                   <a href="javascript:;">喇叭衫</a>
+                                   <a href="javascript:;">纯白衬衫</a>
+                                   <a class="flag" href="javascript:;">红色T恤</a>
+                                   <a href="javascript:;">一字领</a>
+                                   <a class="flag" href="javascript:;">时尚挂脖</a>
+                                   <a href="javascript:;">绑带衬衫</a>
+                                   <a href="javascript:;">甜美荷叶边</a>
+                                   <a class="flag" href="javascript:;">前短后长</a>
+                               </dd>
+                           </dl>
+                           <a href="javascript:;"><img src="images/nav_6.jpg" alt=""></a>
+                       </div>
+                   </li>
+                   <li>
+                       <dl>
+                           <dt><a href="javascript:;">上衣</a></dt>
+                           <dd>
+                               <span>
+                                   <a href="javascript:;">秋上衣</a>
+                                   <a href="javascript:;">衬衣</a>
+                                   <a href="javascript:;">针织衫</a>
+                               </span>
+                           </dd>
+                       </dl>
+                       <div>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">初秋热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">卫衣</a>
+                                   <a href="javascript:;">时尚套装</a>
+                                   <a href="javascript:;">棒球外套</a>
+                                   <a href="javascript:;">风衣</a>
+                                   <a href="javascript:;">牛仔外套</a>
+                                   <a href="javascript:;">皮衣</a>
+                                   <a href="javascript:;">薄外套</a>
+                                   <a href="javascript:;">开衫</a>
+                                   <a href="javascript:;">马甲</a>
+                                   <a href="javascript:;">毛呢外套</a>
+                                   <a href="javascript:;">毛衣</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">换季热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">T恤</a>
+                                   <a href="javascript:;">雪纺衫</a>
+                                   <a href="javascript:;">蕾丝衫</a>
+                                   <a href="javascript:;">衬衫</a>
+                                   <a href="javascript:;">吊带背心</a>
+                                   <a href="javascript:;">娃娃衫</a>
+                                   <a href="javascript:;">针织薄衫</a>
+                                   <a href="javascript:;">情侣衫</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">潮流新品</a></dt>
+                               <dd>
+                                   <a href="javascript:;">短款上衣</a>
+                                   <a href="javascript:;">喇叭衫</a>
+                                   <a href="javascript:;">纯白衬衫</a>
+                                   <a href="javascript:;">红色T恤</a>
+                                   <a href="javascript:;">一字领</a>
+                                   <a href="javascript:;">时尚挂脖</a>
+                                   <a href="javascript:;">绑带衬衫</a>
+                                   <a href="javascript:;">甜美荷叶边</a>
+                                   <a href="javascript:;">前短后长</a>
+                               </dd>
+                           </dl>
+                           <a href="javascript:;"><img src="images/nav_4.jpg" alt=""></a>
+                       </div>
+                   </li>
+                   <li>
+                       <dl>
+                           <dt><a href="javascript:;">上衣</a></dt>
+                           <dd>
+                               <span>
+                                   <a class="flag" href="javascript:;">秋上衣</a>
+                                   <a href="javascript:;">衬衣</a>
+                                   <a href="javascript:;">针织衫</a>
+                               </span>
+                           </dd>
+                       </dl>
+                       <div>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">初秋热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">卫衣</a>
+                                   <a href="javascript:;">时尚套装</a>
+                                   <a href="javascript:;">棒球外套</a>
+                                   <a href="javascript:;">风衣</a>
+                                   <a href="javascript:;">牛仔外套</a>
+                                   <a href="javascript:;">皮衣</a>
+                                   <a class="flag" href="javascript:;">薄外套</a>
+                                   <a href="javascript:;">开衫</a>
+                                   <a href="javascript:;">马甲</a>
+                                   <a href="javascript:;">毛呢外套</a>
+                                   <a href="javascript:;">毛衣</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">换季热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">T恤</a>
+                                   <a href="javascript:;">雪纺衫</a>
+                                   <a class="flag" href="javascript:;">蕾丝衫</a>
+                                   <a href="javascript:;">衬衫</a>
+                                   <a href="javascript:;">吊带背心</a>
+                                   <a href="javascript:;">娃娃衫</a>
+                                   <a href="javascript:;">针织薄衫</a>
+                                   <a href="javascript:;">情侣衫</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">潮流新品</a></dt>
+                               <dd>
+                                   <a href="javascript:;">短款上衣</a>
+                                   <a href="javascript:;">喇叭衫</a>
+                                   <a class="flag" href="javascript:;">纯白衬衫</a>
+                                   <a href="javascript:;">红色T恤</a>
+                                   <a href="javascript:;">一字领</a>
+                                   <a href="javascript:;">时尚挂脖</a>
+                                   <a class="flag" href="javascript:;">绑带衬衫</a>
+                                   <a href="javascript:;">甜美荷叶边</a>
+                                   <a href="javascript:;">前短后长</a>
+                               </dd>
+                           </dl>
+                           <a href="javascript:;"><img src="images/nav_1.jpg" alt=""></a>
+                       </div>
+                   </li>
+                   <li>
+                       <dl>
+                           <dt><a href="javascript:;">上衣</a></dt>
+                           <dd>
+                               <span>
+                                   <a href="javascript:;">秋上衣</a>
+                                   <a class="flag" href="javascript:;">衬衣</a>
+                                   <a href="javascript:;">针织衫</a>
+                               </span>
+                           </dd>
+                       </dl>
+                       <div>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">初秋热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">卫衣</a>
+                                   <a href="javascript:;">时尚套装</a>
+                                   <a href="javascript:;">棒球外套</a>
+                                   <a href="javascript:;">风衣</a>
+                                   <a href="javascript:;">牛仔外套</a>
+                                   <a href="javascript:;">皮衣</a>
+                                   <a class="flag" href="javascript:;">薄外套</a>
+                                   <a href="javascript:;">开衫</a>
+                                   <a href="javascript:;">马甲</a>
+                                   <a href="javascript:;">毛呢外套</a>
+                                   <a href="javascript:;">毛衣</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">换季热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">T恤</a>
+                                   <a href="javascript:;">雪纺衫</a>
+                                   <a href="javascript:;">蕾丝衫</a>
+                                   <a class="flag" href="javascript:;">衬衫</a>
+                                   <a href="javascript:;">吊带背心</a>
+                                   <a href="javascript:;">娃娃衫</a>
+                                   <a href="javascript:;">针织薄衫</a>
+                                   <a href="javascript:;">情侣衫</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">潮流新品</a></dt>
+                               <dd>
+                                   <a href="javascript:;">短款上衣</a>
+                                   <a href="javascript:;">喇叭衫</a>
+                                   <a href="javascript:;">纯白衬衫</a>
+                                   <a class="flag" href="javascript:;">红色T恤</a>
+                                   <a href="javascript:;">一字领</a>
+                                   <a href="javascript:;">时尚挂脖</a>
+                                   <a href="javascript:;">绑带衬衫</a>
+                                   <a href="javascript:;">甜美荷叶边</a>
+                                   <a href="javascript:;">前短后长</a>
+                               </dd>
+                           </dl>
+                           <a href="javascript:;"><img src="images/nav_2.jpg" alt=""></a>
+                       </div>
+                   </li>
+                   <li>
+                       <dl>
+                           <dt><a href="javascript:;">上衣</a></dt>
+                           <dd>
+                               <span>
+                                   <a href="javascript:;">秋上衣</a>
+                                   <a class="flag" href="javascript:;">衬衣</a>
+                                   <a href="javascript:;">针织衫</a>
+                               </span>
+                           </dd>
+                       </dl>
+                       <div>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">初秋热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">卫衣</a>
+                                   <a href="javascript:;">时尚套装</a>
+                                   <a href="javascript:;">棒球外套</a>
+                                   <a class="flag" href="javascript:;">风衣</a>
+                                   <a href="javascript:;">牛仔外套</a>
+                                   <a href="javascript:;">皮衣</a>
+                                   <a href="javascript:;">薄外套</a>
+                                   <a href="javascript:;">开衫</a>
+                                   <a href="javascript:;">马甲</a>
+                                   <a href="javascript:;">毛呢外套</a>
+                                   <a href="javascript:;">毛衣</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">换季热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">T恤</a>
+                                   <a href="javascript:;">雪纺衫</a>
+                                   <a href="javascript:;">蕾丝衫</a>
+                                   <a class="flag" href="javascript:;">衬衫</a>
+                                   <a href="javascript:;">吊带背心</a>
+                                   <a href="javascript:;">娃娃衫</a>
+                                   <a href="javascript:;">针织薄衫</a>
+                                   <a href="javascript:;">情侣衫</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">潮流新品</a></dt>
+                               <dd>
+                                   <a href="javascript:;">短款上衣</a>
+                                   <a href="javascript:;">喇叭衫</a>
+                                   <a href="javascript:;">纯白衬衫</a>
+                                   <a href="javascript:;">红色T恤</a>
+                                   <a href="javascript:;">一字领</a>
+                                   <a class="flag" href="javascript:;">时尚挂脖</a>
+                                   <a href="javascript:;">绑带衬衫</a>
+                                   <a href="javascript:;">甜美荷叶边</a>
+                                   <a href="javascript:;">前短后长</a>
+                               </dd>
+                           </dl>
+                           <a href="javascript:;"><img src="images/nav_2.jpg" alt=""></a>
+                       </div>
+                   </li>
+                   <li>
+                       <dl>
+                           <dt><a href="javascript:;">上衣</a></dt>
+                           <dd>
+                               <span>
+                                   <a class="flag" href="javascript:;">秋上衣</a>
+                                   <a href="javascript:;">衬衣</a>
+                                   <a href="javascript:;">针织衫</a>
+                               </span>
+                           </dd>
+                       </dl>
+                       <div>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">初秋热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">卫衣</a>
+                                   <a href="javascript:;">时尚套装</a>
+                                   <a href="javascript:;">棒球外套</a>
+                                   <a href="javascript:;">风衣</a>
+                                   <a href="javascript:;">牛仔外套</a>
+                                   <a href="javascript:;">皮衣</a>
+                                   <a class="flag" href="javascript:;">薄外套</a>
+                                   <a href="javascript:;">开衫</a>
+                                   <a href="javascript:;">马甲</a>
+                                   <a href="javascript:;">毛呢外套</a>
+                                   <a href="javascript:;">毛衣</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">换季热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">T恤</a>
+                                   <a href="javascript:;">雪纺衫</a>
+                                   <a href="javascript:;">蕾丝衫</a>
+                                   <a href="javascript:;">衬衫</a>
+                                   <a href="javascript:;">吊带背心</a>
+                                   <a class="flag" href="javascript:;">娃娃衫</a>
+                                   <a href="javascript:;">针织薄衫</a>
+                                   <a href="javascript:;">情侣衫</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">潮流新品</a></dt>
+                               <dd>
+                                   <a href="javascript:;">短款上衣</a>
+                                   <a href="javascript:;">喇叭衫</a>
+                                   <a href="javascript:;">纯白衬衫</a>
+                                   <a class="flag" href="javascript:;">红色T恤</a>
+                                   <a href="javascript:;">一字领</a>
+                                   <a href="javascript:;">时尚挂脖</a>
+                                   <a href="javascript:;">绑带衬衫</a>
+                                   <a href="javascript:;">甜美荷叶边</a>
+                                   <a href="javascript:;">前短后长</a>
+                               </dd>
+                           </dl>
+                           <a href="javascript:;"><img src="images/nav_7.jpg" alt="3333333"></a>
+                       </div>
+                   </li>
+                   <li>
+                       <dl>
+                           <dt><a href="javascript:;">上衣</a></dt>
+                           <dd>
+                               <span>
+                                   <a href="javascript:;">秋上衣</a>
+                                   <a class="flag" href="javascript:;">衬衣</a>
+                                   <a href="javascript:;">针织衫</a>
+                               </span>
+                           </dd>
+                       </dl>
+                       <div>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">初秋热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">卫衣</a>
+                                   <a class="flag" href="javascript:;">时尚套装</a>
+                                   <a href="javascript:;">棒球外套</a>
+                                   <a href="javascript:;">风衣</a>
+                                   <a href="javascript:;">牛仔外套</a>
+                                   <a href="javascript:;">皮衣</a>
+                                   <a href="javascript:;">薄外套</a>
+                                   <a href="javascript:;">开衫</a>
+                                   <a href="javascript:;">马甲</a>
+                                   <a href="javascript:;">毛呢外套</a>
+                                   <a href="javascript:;">毛衣</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">换季热卖</a></dt>
+                               <dd>
+                                   <a class="flag" href="javascript:;">T恤</a>
+                                   <a href="javascript:;">雪纺衫</a>
+                                   <a href="javascript:;">蕾丝衫</a>
+                                   <a href="javascript:;">衬衫</a>
+                                   <a href="javascript:;">吊带背心</a>
+                                   <a href="javascript:;">娃娃衫</a>
+                                   <a href="javascript:;">针织薄衫</a>
+                                   <a href="javascript:;">情侣衫</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">潮流新品</a></dt>
+                               <dd>
+                                   <a href="javascript:;">短款上衣</a>
+                                   <a href="javascript:;">喇叭衫</a>
+                                   <a href="javascript:;">纯白衬衫</a>
+                                   <a href="javascript:;">红色T恤</a>
+                                   <a href="javascript:;">一字领</a>
+                                   <a href="javascript:;">时尚挂脖</a>
+                                   <a href="javascript:;">绑带衬衫</a>
+                                   <a href="javascript:;">甜美荷叶边</a>
+                                   <a href="javascript:;">前短后长</a>
+                               </dd>
+                           </dl>
+                           <a href="javascript:;"><img src="images/nav_4.jpg" alt=""></a>
+                       </div>
+                   </li>
+                   <li>
+                       <dl>
+                           <dt><a href="javascript:;">上衣</a></dt>
+                           <dd>
+                               <span>
+                                   <a href="javascript:;">秋上衣</a>
+                                   <a class="flag" href="javascript:;">衬衣</a>
+                                   <a href="javascript:;">针织衫</a>
+                               </span>
+                           </dd>
+                       </dl>
+                       <div>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">初秋热卖</a></dt>
+                               <dd>
+                                   <a href="javascript:;">卫衣</a>
+                                   <a class="flag" href="javascript:;">时尚套装</a>
+                                   <a href="javascript:;">棒球外套</a>
+                                   <a href="javascript:;">风衣</a>
+                                   <a href="javascript:;">牛仔外套</a>
+                                   <a href="javascript:;">皮衣</a>
+                                   <a href="javascript:;">薄外套</a>
+                                   <a href="javascript:;">开衫</a>
+                                   <a href="javascript:;">马甲</a>
+                                   <a href="javascript:;">毛呢外套</a>
+                                   <a href="javascript:;">毛衣</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">换季热卖</a></dt>
+                               <dd>
+                                   <a class="flag" href="javascript:;">T恤</a>
+                                   <a href="javascript:;">雪纺衫</a>
+                                   <a href="javascript:;">蕾丝衫</a>
+                                   <a href="javascript:;">衬衫</a>
+                                   <a href="javascript:;">吊带背心</a>
+                                   <a href="javascript:;">娃娃衫</a>
+                                   <a href="javascript:;">针织薄衫</a>
+                                   <a class="flag" href="javascript:;">情侣衫</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">潮流新品</a></dt>
+                               <dd>
+                                   <a href="javascript:;">短款上衣</a>
+                                   <a href="javascript:;">喇叭衫</a>
+                                   <a href="javascript:;">纯白衬衫</a>
+                                   <a href="javascript:;">红色T恤</a>
+                                   <a href="javascript:;">一字领</a>
+                                   <a href="javascript:;">时尚挂脖</a>
+                                   <a class="flag" href="javascript:;">绑带衬衫</a>
+                                   <a href="javascript:;">甜美荷叶边</a>
+                                   <a href="javascript:;">前短后长</a>
+                               </dd>
+                           </dl>
+                           <a href="javascript:;"><img src="images/nav_5.jpg" alt=""></a>
+                       </div>
+                   </li>
+                   <li>
+                       <dl>
+                           <dt><a href="javascript:;">上衣</a></dt>
+                           <dd>
+                               <span>
+                                   <a href="javascript:;">秋上衣</a>
+                                   <a href="javascript:;">衬衣</a>
+                                   <a class="flag" href="javascript:;">针织衫</a>
+                               </span>
+                           </dd>
+                       </dl>
+                       <div>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">初秋热卖</a></dt>
+                               <dd>
+                                   <a class="flag" href="javascript:;">卫衣</a>
+                                   <a href="javascript:;">时尚套装</a>
+                                   <a href="javascript:;">棒球外套</a>
+                                   <a href="javascript:;">风衣</a>
+                                   <a href="javascript:;">牛仔外套</a>
+                                   <a class="flag" href="javascript:;">皮衣</a>
+                                   <a href="javascript:;">薄外套</a>
+                                   <a href="javascript:;">开衫</a>
+                                   <a href="javascript:;">马甲</a>
+                                   <a href="javascript:;">毛呢外套</a>
+                                   <a class="flag" href="javascript:;">毛衣</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">换季热卖</a></dt>
+                               <dd>
+                                   <a class="flag" href="javascript:;">T恤</a>
+                                   <a href="javascript:;">雪纺衫</a>
+                                   <a class="flag" href="javascript:;">蕾丝衫</a>
+                                   <a href="javascript:;">衬衫</a>
+                                   <a href="javascript:;">吊带背心</a>
+                                   <a href="javascript:;">娃娃衫</a>
+                                   <a class="flag" href="javascript:;">针织薄衫</a>
+                                   <a href="javascript:;">情侣衫</a>
+                               </dd>
+                           </dl>
+                           <dl class="clearfix">
+                               <dt><a href="javascript:;">潮流新品</a></dt>
+                               <dd>
+                                   <a href="javascript:;">短款上衣</a>
+                                   <a class="flag" href="javascript:;">喇叭衫</a>
+                                   <a href="javascript:;">纯白衬衫</a>
+                                   <a href="javascript:;">红色T恤</a>
+                                   <a href="javascript:;">一字领</a>
+                                   <a class="flag" href="javascript:;">时尚挂脖</a>
+                                   <a href="javascript:;">绑带衬衫</a>
+                                   <a href="javascript:;">甜美荷叶边</a>
+                                   <a class="flag" href="javascript:;">前短后长</a>
+                               </dd>
+                           </dl>
+                           <a href="javascript:;"><img src="images/nav_6.jpg" alt=""></a>
+                       </div>
+                   </li>
+
+
+               </ul>
+           </div>
+            <!--//轮播图-->
+           <div class="ad_LBT">
+               <ul>
+                   <li><a href="javascript:;"><img src="images/LBT_2.jpg" alt=""></a></li>
+                   <li><a href="javascript:;"><img src="images/LBT_3.jpg" alt=""></a></li>
+                   <li><a href="javascript:;"><img src="images/LBT_4.jpg" alt=""></a></li>
+                   <li><a href="javascript:;"><img src="images/LBT_5.jpg" alt=""></a></li>
+                   <li><a href="javascript:;"><img src="images/LBT_6.jpg" alt=""></a></li>
+                   <li><a href="javascript:;"><img src="images/LBT_7.jpg" alt=""></a></li>
+               </ul>
+               <a class="prev" href="javascript:;">&lt;</a>
+               <a class="next" href="javascript:;">&gt;</a>
+               <ol>
+                   <li class="active"></li>
+                   <li></li>
+                   <li></li>
+                   <li></li>
+                   <li></li>
+                   <li></li>
+               </ol>
+
+           </div>
+           <div class="ad_right">
+               <ul>
+                   <li><a href="javascript:;"><img src="images/content_r_12.jpg" alt=""></a></li>
+                   <li class="li2"><a href="javascript:;"><img src="images/content_r_13.jpg" alt=""></a></li>
+               </ul>
+           </div>
+        </div>
+    </div><!--ad结束-->
+
+    <div id="content">
+        <div class="content">
+           <div class="content_1 clearfix">
+               <div class="Dj fl">
+                   <div class="Dj_top">
+                       <span>限时快抢</span>
+                       <ul>
+                           <li class="timer">00</li>
+                           <li>:</li>
+                           <li class="timer">00</li>
+                           <li>:</li>
+                           <li class="timer">00</li>
+                       </ul>
+                   </div>
+                   <div class="Dj_img">
+                       <a href="javascript:;"><img src="images/content_2_1.jpg" alt=""></a>
+                   </div>
+               </div>
+               <div class="con_1 fl">
+                   <a href="javascript:;"><img src="images/content_2_2.jpg" alt=""></a>
+                   <a href="javascript:;"><img src="images/content_2_5.jpg" alt=""></a>
+               </div>
+               <div class="con_2">
+                   <a href="javascript:;"><img class="img_1" src="images/content_2_3.jpg" alt=""></a>
+                   <a href="javascript:;"><img src="images/content_2_4.jpg" alt=""></a>
+               </div>
+           </div><!--content_1结束-->
+
+           <div class="model_1" id="model1">
+               <div class="top">
+                   <span></span>
+                   <h3>蘑菇良品</h3>
+                   <span></span>
+               </div>
+               <div class="cont clearfix">
+                   <div class="wash fl clearfix">
+                       <ul>
+                           <li><a href="javascript:;"><img src="images/content_2_13.jpg" alt=""></a></li>
+                           <li class="s_li"><a href="javascript:;"><img src="images/content_2_12.jpg" alt=""></a></li>
+                           <li class="last_li">
+                               <a href="javascript:;">日系毛巾</a>
+                               <a href="javascript:;">韩系毛巾</a>
+                               <a href="javascript:;">进口卫生巾</a>
+                               <a href="javascript:;">皇家御用...</a>
+                               <a href="javascript:;">韩系毛巾</a>
+                               <a href="javascript:;">进口毛巾</a>
+                               <a href="javascript:;">日系毛巾</a>
+                               <a href="javascript:;">韩系毛巾</a>
+                               <a href="javascript:;">凹凸有致...</a>
+                           </li>
+                       </ul>
+
+                   </div>
+                   <div class="t_q fl">
+                       <ul>
+                           <li>
+                               <div>
+                                   <span>
+                                       <i>☆</i>
+                                       <p>关注人数 256</p>
+                                       <a href="javascript:;">点击关注</a>
+                                   </span>
+                               </div>
+                               <a href="javascript:;">
+                                   <img src="images/content_2_6.jpg" alt="">
+                               </a>
+                               <div>
+                                   <a href="javascript:;"><img src="images/content_2_9.jpg" alt=""></a>
+                                   <p><a href="javascript:;">原创T恤</a></p>
+                                   <span><a href="javascript:;">设计款型</a></span>
+                               </div>
+                           </li>
+                           <li>
+                               <div>
+                                   <span>
+                                       <i>☆</i>
+                                       <p>关注人数 256</p>
+                                       <a href="javascript:;">点击关注</a>
+                                   </span>
+                               </div>
+                               <a href="javascript:;"><img src="images/content_2_7.jpg" alt=""></a>
+                               <div>
+                                   <a href="javascript:;"><img src="images/content_2_10.jpg" alt=""></a>
+                                   <p><a href="javascript:;">原创T恤</a></p>
+                                   <span><a href="javascript:;">设计款型</a></span>
+                               </div>
+                           </li>
+                           <li>
+                               <div>
+                                   <span>
+                                       <i>☆</i>
+                                       <p>关注人数 256</p>
+                                       <a href="javascript:;">点击关注</a>
+                                   </span>
+                               </div>
+                               <a href="javascript:;"><img src="images/content_2_8.jpg" alt=""></a>
+                               <div>
+                                   <a href="javascript:;"><img src="images/content_2_11.jpg" alt=""></a>
+                                   <p><a href="javascript:;">原创T恤</a></p>
+                                   <span><a href="javascript:;">设计款型</a></span>
+                               </div>
+                           </li>
+                       </ul>
+                   </div>
+               </div>
+           </div><!--model_1结束-->
+           <div class="model_2" id="model2">
+                <div class="top">
+                    <span></span>
+                    <h3>品牌站</h3>
+                    <span></span>
+                </div>
+                <div class="cont clearfix">
+                    <div class="cont_left fl">
+                        <a href="javascript:;"><img src="images/content_3_13.jpg" alt=""></a>
+                        <ul>
+                            <li>
+                                <span>
+                                    <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a>
+                                </span>
+                                <a href="javascript:;"><img src="images/content_lg_1.jpg" alt=""></a>
+                            </li>
+                            <li><span>
+                                    <i>☆</i>
+                                    <p>关注人数 360</p>
+                                    <a href="javascript:;">点击关注</a>
+                                </span>
+                                <a href="javascript:;"><img src="images/content_lg_2.jpg" alt=""></a>
+                            </li>
+                            <li><span>
+                                    <i>☆</i>
+                                    <p>关注人数 431</p>
+                                    <a href="javascript:;">点击关注</a>
+                                </span>
+                                <a href="javascript:;"><img src="images/content_lg_3.jpg" alt=""></a>
+                            </li>
+                            <li><span>
+                                    <i>☆</i>
+                                    <p>关注人数 573</p>
+                                    <a href="javascript:;">点击关注</a>
+                                </span>
+                                <a href="javascript:;"><img src="images/content_lg_4.jpg" alt=""></a>
+                            </li>
+                            <li><span>
+                                    <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a>
+                                </span>
+                                <a href="javascript:;"><img src="images/content_lg_5.jpg" alt=""></a>
+                            </li>
+                            <li><span>
+                                    <i>☆</i>
+                                    <p>关注人数 173</p>
+                                    <a href="javascript:;">点击关注</a>
+                                </span>
+                                <a href="javascript:;"><img src="images/content_lg_6.jpg" alt=""></a>
+                            </li>
+                            <li><span>
+                                    <i>☆</i>
+                                    <p>关注人数 231</p>
+                                    <a href="javascript:;">点击关注</a>
+                                </span>
+                                <a href="javascript:;"><img src="images/content_lg_7.jpg" alt=""></a>
+                            </li>
+                            <li><span>
+                                    <i>☆</i>
+                                    <p>关注人数 345</p>
+                                    <a href="javascript:;">点击关注</a>
+                                </span>
+                                <a href="javascript:;"><img src="images/content_lg_8.jpg" alt=""></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="cont_right fl clearfix">
+                        <a href="javascript:;"><img src="images/content_2_14.jpg" alt=""></a>
+                        <ul class="clearfix">
+                            <li class="clearfix">
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_2_15.jpg" alt=""></a>
+                                <span><a href="javascript:;">耐克直降300</a> <a>&yen;299</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_2_16.jpg" alt=""></a>
+                                <span><a href="javascript:;">匡威特惠</a> <a>&yen;669</a></span>
+                            </li>
+                            <li class="clearfix">
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a class="clearfix" href="javascript:;"><img src="images/content_2_17.jpg" alt=""></a>
+                                <span><a href="javascript:;">adidas秋上新</a> <a>&yen;239</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_2_18.jpg" alt=""></a>
+                                <span><a href="javascript:;">乔丹低至89</a> <a>&yen;173</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_2_19.jpg" alt=""></a>
+                                <span><a href="javascript:;">鸿星尔克满减</a> <a>&yen;161</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_2_20.jpg" alt=""></a>
+                                <span><a href="javascript:;">森茂运动59元起</a> <a>&yen;101</a></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>  <!--model_2结束-->
+           <div class="model_2" id="model3">
+                <div class="top">
+                    <span></span>
+                    <h3>潮流女装</h3>
+                    <span></span>
+                </div>
+                <div class="cont clearfix">
+                    <div class="cont_left fl">
+                        <a href="javascript:;"><img src="images/content_3_12.jpg" alt=""></a>
+                        <ul>
+                            <li> <span>
+                                    <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a>
+                                </span>
+                                <a href="javascript:;"><img src="images/content_lg_9.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_10.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_11.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_12.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_13.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_14.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_15.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_16.jpg" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="cont_right fl clearfix">
+                        <a href="javascript:;"><img src="images/content_3_11.jpg" alt=""></a>
+                        <ul>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_14.jpg" alt=""></a>
+                                <span><a href="javascript:;">耐克直降300</a> <a>&yen;249</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_15.jpg" alt=""></a>
+                                <span><a href="javascript:;">匡威特惠</a> <a>&yen;399</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_16.jpg" alt=""></a>
+                                <span><a href="javascript:;">adidas秋上新</a> <a>&yen;199</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_17.jpg" alt=""></a>
+                                <span><a href="javascript:;">乔丹低至89</a> <a>&yen;139</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_18.jpg" alt=""></a>
+                                <span><a href="javascript:;">鸿星尔克满减</a> <a>&yen;321</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_5.jpg" alt=""></a>
+                                <span><a href="javascript:;">森茂运动59元起</a> <a>&yen;221</a></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>  <!--model_2结束-->
+           <div class="model_2" id="model4">
+                <div class="top">
+                    <span></span>
+                    <h3>人气女鞋</h3>
+                    <span></span>
+                </div>
+                <div class="cont clearfix">
+                    <div class="cont_left fl">
+                        <a href="javascript:;"><img src="images/content_3_10.jpg" alt=""></a>
+                        <ul>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_17.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_18.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_19.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_20.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_21.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_22.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_23.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_24.jpg" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="cont_right fl clearfix">
+                        <a href="javascript:;"><img src="images/content_3_9.jpg" alt=""></a>
+                        <ul>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_19.jpg" alt=""></a>
+                                <span><a href="javascript:;">耐克直降300</a> <a>&yen;279</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_20.jpg" alt=""></a>
+                                <span><a href="javascript:;">匡威特惠</a> <a>&yen;399</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_21.jpg" alt=""></a>
+                                <span><a href="javascript:;">adidas秋上新</a> <a>&yen;549</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_22.jpg" alt=""></a>
+                                <span><a href="javascript:;">乔丹低至89</a> <a>&yen;459</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_23.jpg" alt=""></a>
+                                <span><a href="javascript:;">鸿星尔克满减</a> <a>&yen;319</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_24.jpg" alt=""></a>
+                                <span><a href="javascript:;">森茂运动59元起</a> <a>&yen;299</a></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>  <!--model_2结束-->
+           <div class="model_1" id="model5">
+                <div class="top">
+                    <span></span>
+                    <h3>男友潮搭</h3>
+                    <span></span>
+                </div>
+                <div class="cont clearfix">
+                    <div class="wash fl clearfix">
+                        <ul>
+                            <li><a href="javascript:;"><img src="images/content_2_21.jpg" alt=""></a></li>
+                            <li class="s_li"><a href="javascript:;"><img src="images/content_2_22.jpg" alt=""></a></li>
+                            <li class="last_li">
+                                <a href="javascript:;">日系毛巾</a>
+                                <a href="javascript:;">韩系毛巾</a>
+                                <a href="javascript:;">进口卫生巾</a>
+                                <a href="javascript:;">皇家御用...</a>
+                                <a href="javascript:;">韩系毛巾</a>
+                                <a href="javascript:;">进口毛巾</a>
+                                <a href="javascript:;">日系毛巾</a>
+                                <a href="javascript:;">韩系毛巾</a>
+                                <a href="javascript:;">凹凸有致...</a>
+                            </li>
+                        </ul>
+
+                    </div>
+                    <div class="t_q fl">
+                        <ul>
+                            <li>
+                                <div>
+                                   <span>
+                                       <i>☆</i>
+                                       <p>关注人数 256</p>
+                                       <a href="javascript:;">点击关注</a>
+                                   </span>
+                                </div>
+                                <a href="javascript:;"><img src="images/content_2_23.jpg" alt=""></a>
+                                <div>
+                                    <a href="javascript:;"><img src="images/content_2_27.jpg" alt=""></a>
+                                    <p><a href="javascript:;">原创T恤</a></p>
+                                    <span><a href="javascript:;">设计款型</a></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                   <span>
+                                       <i>☆</i>
+                                       <p>关注人数 256</p>
+                                       <a href="javascript:;">点击关注</a>
+                                   </span>
+                                </div>
+                                <a href="javascript:;"><img src="images/content_2_24.jpg" alt=""></a>
+                                <div>
+                                    <a href="javascript:;"><img src="images/content_2_28.jpg" alt=""></a>
+                                    <p><a href="javascript:;">原创T恤</a></p>
+                                    <span><a href="javascript:;">设计款型</a></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                   <span>
+                                       <i>☆</i>
+                                       <p>关注人数 256</p>
+                                       <a href="javascript:;">点击关注</a>
+                                   </span>
+                                </div>
+                                <a href="javascript:;"><img src="images/content_2_25.jpg" alt=""></a>
+                                <div>
+                                    <a href="javascript:;"><img src="images/content_2_26.jpg" alt=""></a>
+                                    <p><a href="javascript:;">原创T恤</a></p>
+                                    <span><a href="javascript:;">设计款型</a></span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div><!--model_1结束-->
+           <div class="model_1" id="model6">
+                <div class="top">
+                    <span></span>
+                    <h3>箱包配饰</h3>
+                    <span></span>
+                </div>
+                <div class="cont clearfix">
+                    <div class="wash fl clearfix">
+                        <ul>
+                            <li><a href="javascript:;"><img src="images/content_2_29.jpg" alt=""></a></li>
+                            <li class="s_li"><a href="javascript:;"><img src="images/content_2_30.jpg" alt=""></a></li>
+                            <li class="last_li">
+                                <a href="javascript:;">日系毛巾</a>
+                                <a href="javascript:;">韩系毛巾</a>
+                                <a href="javascript:;">进口卫生巾</a>
+                                <a href="javascript:;">皇家御用...</a>
+                                <a href="javascript:;">韩系毛巾</a>
+                                <a href="javascript:;">进口毛巾</a>
+                                <a href="javascript:;">日系毛巾</a>
+                                <a href="javascript:;">韩系毛巾</a>
+                                <a href="javascript:;">凹凸有致...</a>
+                            </li>
+                        </ul>
+
+                    </div>
+                    <div class="t_q fl">
+                        <ul>
+                            <li>
+                                <div>
+                                   <span>
+                                       <i>☆</i>
+                                       <p>关注人数 256</p>
+                                       <a href="javascript:;">点击关注</a>
+                                   </span>
+                                </div>
+                                <a href="javascript:;"><img src="images/content_2_31.jpg" alt=""></a>
+                                <div>
+                                    <a href="javascript:;"><img src="images/content_2_34.jpg" alt=""></a>
+                                    <p><a href="javascript:;">原创T恤</a></p>
+                                    <span><a href="javascript:;">设计款型</a></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                   <span>
+                                       <i>☆</i>
+                                       <p>关注人数 256</p>
+                                       <a href="javascript:;">点击关注</a>
+                                   </span>
+                                </div>
+                                <a href="javascript:;"><img src="images/content_2_32.jpg" alt=""></a>
+                                <div>
+                                    <a href="javascript:;"><img src="images/content_2_35.jpg" alt=""></a>
+                                    <p><a href="javascript:;">原创T恤</a></p>
+                                    <span><a href="javascript:;">设计款型</a></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                   <span>
+                                       <i>☆</i>
+                                       <p>关注人数 256</p>
+                                       <a href="javascript:;">点击关注</a>
+                                   </span>
+                                </div>
+                                <a href="javascript:;"><img src="images/content_2_33.jpg" alt=""></a>
+                                <div>
+                                    <a href="javascript:;"><img src="images/content_2_36.jpg" alt=""></a>
+                                    <p><a href="javascript:;">原创T恤</a></p>
+                                    <span><a href="javascript:;">设计款型</a></span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div><!--model_1结束-->
+           <div class="model_2" id="model7">
+                <div class="top">
+                    <span></span>
+                    <h3>运动瘦身</h3>
+                    <span></span>
+                </div>
+                <div class="cont clearfix">
+                    <div class="cont_left fl">
+                        <a href="javascript:;"><img src="images/content_3_25.jpg" alt=""></a>
+                        <ul>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_25.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_26.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_27.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_28.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_29.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_30.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_31.png" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_32.png" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="cont_right fl clearfix">
+                        <a href="javascript:;"><img src="images/content_3_26.jpg" alt=""></a>
+                        <ul>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_27.jpg" alt=""></a>
+                                <span><a href="javascript:;">耐克直降300</a> <a>&yen;59</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_28.jpg" alt=""></a>
+                                <span><a href="javascript:;">匡威特惠</a> <a>&yen;95</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_29.jpg" alt=""></a>
+                                <span><a href="javascript:;">adidas秋上新</a> <a>&yen;519</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_30.jpg" alt=""></a>
+                                <span><a href="javascript:;">乔丹低至89</a> <a>&yen;129</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_31.jpg" alt=""></a>
+                                <span><a href="javascript:;">鸿星尔克满减</a> <a>&yen;156</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_33.jpg" alt=""></a>
+                                <span><a href="javascript:;">森茂运动59元起</a> <a>&yen;349</a></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>  <!--model_2结束-->
+           <div class="model_2" id="model8">
+                <div class="top">
+                    <span></span>
+                    <h3>时尚美妆</h3>
+                    <span></span>
+                </div>
+                <div class="cont clearfix">
+                    <div class="cont_left fl">
+                        <a href="javascript:;"><img src="images/content_3_34.jpg" alt=""></a>
+                        <ul>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_33.png" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_34.png" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_35.png" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_36.png" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_37.png" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_38.png" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_39.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_40.jpg" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="cont_right fl clearfix">
+                        <a href="javascript:;"><img src="images/content_3_26.jpg" alt=""></a>
+                        <ul>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_36.jpg" alt=""></a>
+                                <span><a href="javascript:;">耐克直降300</a> <a>&yen;519</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_37.jpg" alt=""></a>
+                                <span><a href="javascript:;">匡威特惠</a> <a>&yen;529</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_38.jpg" alt=""></a>
+                                <span><a href="javascript:;">adidas秋上新</a> <a>&yen;539</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_39.jpg" alt=""></a>
+                                <span><a href="javascript:;">乔丹低至89</a> <a>&yen;549</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_40.jpg" alt=""></a>
+                                <span><a href="javascript:;">鸿星尔克满减</a> <a>&yen;559</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_41.jpg" alt=""></a>
+                                <span><a href="javascript:;">森茂运动59元起</a> <a>&yen;569</a></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>  <!--model_2结束-->
+           <div class="model_2" id="model9">
+                <div class="top">
+                    <span></span>
+                    <h3>家居生活</h3>
+                    <span></span>
+                </div>
+                <div class="cont clearfix">
+                    <div class="cont_left fl">
+                        <a href="javascript:;"><img src="images/content_3_42.jpg" alt=""></a>
+                        <ul>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_41.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_42.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_43.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_44.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_45.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_46.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_47.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_48.jpg" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="cont_right fl clearfix">
+                        <a href="javascript:;"><img src="images/content_3_43.jpg" alt=""></a>
+                        <ul>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_44.jpg" alt=""></a>
+                                <span><a href="javascript:;">耐克直降300</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_45.jpg" alt=""></a>
+                                <span><a href="javascript:;">匡威特惠</a> <a>&yen;429</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_46.jpg" alt=""></a>
+                                <span><a href="javascript:;">adidas秋上新</a> <a>&yen;319</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_47.jpg" alt=""></a>
+                                <span><a href="javascript:;">乔丹低至89</a> <a>&yen;219</a> <a>&yen;59</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_48.jpg" alt=""></a>
+                                <span><a href="javascript:;">鸿星尔克满减</a> <a>&yen;339</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_49.jpg" alt=""></a>
+                                <span><a href="javascript:;">森茂运动59元起</a> <a>&yen;129</a></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>  <!--model_2结束-->
+           <div class="model_2" id="model10">
+                <div class="top">
+                    <span></span>
+                    <h3>辣妈潮宝</h3>
+                    <span></span>
+                </div>
+                <div class="cont clearfix">
+                    <div class="cont_left fl">
+                        <a href="javascript:;"><img src="images/content_3_50.jpg" alt=""></a>
+                        <ul>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_49.png" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_50.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_51.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_52.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_53.png" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_54.png" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_55.png" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_56.png" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="cont_right fl clearfix">
+                        <a href="javascript:;"><img src="images/content_3_51.jpg" alt=""></a>
+                        <ul>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_52.jpg" alt=""></a>
+                                <span><a href="javascript:;">耐克直降300</a> <a>&yen;689</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_53.jpg" alt=""></a>
+                                <span><a href="javascript:;">匡威特惠</a> <a>&yen;589</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_54.jpg" alt=""></a>
+                                <span><a href="javascript:;">adidas秋上新</a> <a>&yen;459</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_55.jpg" alt=""></a>
+                                <span><a href="javascript:;">乔丹低至89</a> <a>&yen;359</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_7.jpg" alt=""></a>
+                                <span><a href="javascript:;">鸿星尔克满减</a> <a>&yen;369</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_56.jpg" alt=""></a>
+                                <span><a href="javascript:;">森茂运动59元起</a> <a>&yen;299</a></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>  <!--model_2结束-->
+           <div class="model_2" id="model11">
+                <div class="top">
+                    <span></span>
+                    <h3>吃心绝对</h3>
+                    <span></span>
+                </div>
+                <div class="cont clearfix">
+                    <div class="cont_left fl">
+                        <a href="javascript:;"><img src="images/content_3_58.jpg" alt=""></a>
+                        <ul>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_57.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_58.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_59.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_60.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_61.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_62.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_63.jpg" alt=""></a></li>
+                            <li><span> <i>☆</i>
+                                    <p>关注人数 256</p>
+                                    <a href="javascript:;">点击关注</a></span><a href="javascript:;"><img src="images/content_lg_64.jpg" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="cont_right fl clearfix">
+                        <a href="javascript:;"><img src="images/content_3_59.jpg" alt=""></a>
+                        <ul>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_60.jpg" alt=""></a>
+                                <span><a href="javascript:;">耐克直降300</a> <a>&yen;59</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_61.jpg" alt=""></a>
+                                <span><a href="javascript:;">匡威特惠</a> <a>&yen;499</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_62.jpg" alt=""></a>
+                                <span><a href="javascript:;">adidas秋上新</a> <a>&yen;379</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_63.jpg" alt=""></a>
+                                <span><a href="javascript:;">乔丹低至89</a> <a>&yen;199</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_64.jpg" alt=""></a>
+                                <span><a href="javascript:;">鸿星尔克满减</a> <a>&yen;599</a></span>
+                            </li>
+                            <li>
+                                <p>
+                                    <span><a href="javascript:;" ng-click="add($event)">☆加入购物车</a></span>
+                                </p>
+                                <a href="javascript:;"><img src="images/content_3_65.jpg" alt=""></a>
+                                <span><a href="javascript:;">森茂运动59元起</a> <a>&yen;59</a></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>  <!--model_2结束-->
+        </div><!--.content结束-->
+    </div><!--#content结束-->
+    <div class="footer">
+       <div class="content">
+           <div class="top clearfix">
+               <div class="left fl">
+                   <h1><img src="images/logo.png" alt=""></h1>
+                   <div>
+                       <p>营业执照注册号：330106000129004</p>
+                       <p>增值电信业务经营许可证：浙B2-20110349</p>
+                       <p>网络文化经营许可证：浙网文（2016）0349-219号</p>
+                       <p>安全责任书</p>
+                       <p class="p_1">浙公网安备 33010602002329号</p>
+                       <p>©2016 Mogujie.com 杭州卷瓜网络有限公司</p>
+                   </div>
+               </div>
+               <div class="right fl">
+                   <ul>
+                       <li>
+                           <h4>公司</h4>
+                           <a href="javascript:;">关于我们</a>
+                           <a href="javascript:;">招聘信息</a>
+                           <a href="javascript:;">联系我们</a>
+                       </li>
+                       <li>
+                           <h4>消费者</h4>
+                           <a href="javascript:;">消费者服务</a>
+                           <a href="javascript:;">意见反馈</a>
+                           <a href="javascript:;">手机版下载</a>
+                       </li>
+                       <li>
+                           <h4>商家</h4>
+                           <a href="javascript:;">商家入驻</a>
+                           <a href="javascript:;">商家后台</a>
+                           <a href="javascript:;">蘑菇商学院</a>
+                           <a href="javascript:;">商家社区</a>
+                       </li>
+                       <li>
+                           <h4>权威认证</h4>
+                           <a href="javascript:;"><img src="images/footer_2.png" alt=""></a>
+                       </li>
+                   </ul>
+
+               </div>
+           </div>
+           <div class="bottom">
+               <ul>
+                   <li><p>友情链接</p></li>
+                   <li><a href="javascript:;">美丽说</a></li>
+                   <li><a href="javascript:;">蘑菇街游戏</a></li>
+                   <li><a href="javascript:;">淘粉吧</a></li>
+                   <li><a href="javascript:;">穿衣搭配</a></li>
+                   <li><a href="javascript:;">秋季女装新款</a></li>
+                   <li><a href="javascript:;">秋季连衣裙长袖</a></li>
+                   <li><a href="javascript:;">秋季孕妇装</a></li>
+                   <li><a href="javascript:;">QQ钱包</a></li>
+                   <li><a href="javascript:;">时尚品牌网</a></li>
+                   <li><a href="javascript:;">装修</a></li>
+                   <li><a href="javascript:;">背带裤搭配</a></li>
+                   <li><a href="javascript:;">衣联网</a></li>
+                   <li><a href="javascript:;">播视网视频</a></li>
+                   <li><a href="javascript:;">慧聪网</a></li>
+                   <li><a href="javascript:;">  衬衫搭配</a></li>
+                   <li><a href="javascript:;">牛仔外套搭配图片</a></li>
+                   <li><a href="javascript:;">冬装时尚搭配</a></li>
+                   <li><a href="javascript:;">针织衫搭配</a></li>
+                   <li><a href="javascript:;">牛仔衣搭配</a></li>
+                   <li><a href="javascript:;">风衣搭配</a></li>
+                   <li><a href="javascript:;">补水面膜排行榜</a></li>
+               </ul>
+           </div>
+       </div>
+    </div>
+</body>
+</html>

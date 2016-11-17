@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="css/LoginReg.css">
+    <link rel="icon" href="images/icon.ico">
+    <script src="js/cookie.js"></script>
+    <script src="js/jquery-1.7.2.js"></script>
+    <script src="js/RegLogin.js"></script>
+    <script src="js/ajax.js"></script>
+    <script>
+        window.onload=function (){
+            var oUser=document.getElementById('user');
+            var oPass=document.getElementById('psd');
+            var oLogin=document.getElementById('login');
+            oLogin.onclick=function (){
+                ajax({
+                    url:'/u',
+                    data:{
+                        act:'login',
+                        username:oUser.value,
+                        password:oPass.value
+                    },
+                    success:function (str){
+                        console.log(str);
+                        setCookie('bOk',true,1);
+                        setCookie('name',$('.name').val(),1);
+                        window.location.href='index.html';
+                    },
+                    error:function (err){
+                        console.log(err);
+                    }
+                });
+            };
+        };
+    </script>
+</head>
+<body>
+    <div class="login">
+        <div class="logo">
+            <h1><img src="images/logo.png"></h1>
+        </div>
+        <div class="login_content clearfix">
+            <div class="login_left">
+                <img src="images/login.jpg" alt="">
+            </div>
+            <div class="login_right">
+                <div class="login_mod_tab clearfix">
+                    <div class="mod active fl">
+                        <a href="javascript:;">普通登录</a>
+                    </div>
+                    <div class="mod fl">
+                        <a href="javascript:;">手机无密码登录</a>
+                    </div>
+                </div>
+                <div class="content">
+                    <form action="" method="post" class="form actives">
+                        <div class="p">
+                            <input class="name2" id="user1" type="text" value="">
+                            <span id="p1">手机号</span>
+                        </div>
+                        <div class="p">
+                            <input type="text" value="">
+                            <span id="p2">验证码</span>
+                        </div>
+                        <div class="p">
+                            <input id="psd1" class="psd" type="password" value="">
+                            <span>密码</span>
+                        </div>
+                        <div class="p" id="cuo1" >
+                            <input type="text" value="" disabled>
+                            <span>用户名错误,请重新输入！</span>
+                        </div>
+                        <div class="ck">
+                            <input id="ck1" type="checkbox">
+                            <label for="ck">2周内自动登录</label>
+                            <a href="javascript:;">忘记密码？</a>
+                        </div>
+                        <input type="button" value="登录" id="login1">
+                    </form>
+                    <form action="" method="post" class="form">
+                        <div class="p">
+                            <input class="name" id="user" type="text" value="">
+                            <span id="p">邮箱/手机号/昵称</span>
+                        </div>
+                        <div class="p">
+                            <input id="psd" class="psd" type="password" value="">
+                            <span>密码</span>
+                        </div>
+                        <div class="p" id="cuo" >
+                            <input type="text" value="" disabled>
+                            <span>用户名错误,请重新输入！</span>
+                        </div>
+                        <div class="ck">
+                            <input id="ck" type="checkbox">
+                            <label for="ck">2周内自动登录</label>
+                            <a href="javascript:;">忘记密码？</a>
+                        </div>
+                        <input type="button" value="登录" id="login">
+                    </form>
+                    <div class="content_bottom">
+                        <div class="content_a">
+                            <a href="javascript:;">海外手机登录</a>
+                            <a class="a2" href="javascript:;">新用户登录</a>
+                        </div>
+
+                        <span>你也可以用以下方式登录：</span>
+                        <div class="content_b">
+                            <a href="javascript;;"><img src="images/QQ.png" alt=""></a>
+                            <a href="javascript;;"><img src="images/weibo.png" alt=""></a>
+                            <a href="javascript;;"><img src="images/weixin.png" alt=""></a>
+                        </div>
+                        <p><sup>*</sup>除腾讯以外的其它三方登录即将关闭，届时请使用手机/昵称/QQ/微信进行登录</p>
+                    </div>
+                </div><!--content结束-->
+            </div><!--login_right结束-->
+        </div><!--login_content结束-->
+        <div class="login_bottom clearfix">
+            <div class="clearfix">
+                <ul class="fl">
+                    <li>
+                        <span>新手帮助</span>
+                        <a href="javascript:;">如何购买</a>
+                        <a href="javascript:;">支付教程</a>
+                        <a href="javascript:;">优惠券使用</a>
+                        <a href="javascript:;">常见问题</a>
+                    </li>
+                    <li>
+                        <span>权益保障</span>
+                        <a href="javascript:;">全国包邮</a>
+                        <a href="javascript:;">7天无理由退货</a>
+                        <a href="javascript:;">退货运费补贴</a>
+                        <a href="javascript:;">72小时发货</a>
+                    </li>
+                    <li>
+                        <span>商家服务</span>
+                        <a href="javascript:;">免费开店</a>
+                        <a href="javascript:;">商家社区</a>
+                        <a href="javascript:;">商家入驻</a>
+                        <a href="javascript:;">管理后台</a>
+                    </li>
+                </ul>
+                <div class="app rg">
+                    <span>蘑菇街移动客户端</span>
+                </div>
+            </div>
+            <div class="bottom">
+                <p>©Copyright 2010-2016蘑菇街 Mogujie.com (增值电信业务经营许可证：浙B2-20110349)</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

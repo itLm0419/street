@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link rel="stylesheet" href="css/LoginReg.css">
+    <link rel="icon" href="images/icon.ico">
+    <script src="js/cookie.js"></script>
+    <script src="js/jquery-1.7.2.js"></script>
+    <script src="js/ajax.js"></script>
+    <script src="js/RegLogin.js"></script>
+    <script>
+
+        window.onload=function (){
+            var oUser=document.getElementById('user');
+            var oPass=document.getElementById('psd');
+            var oReg=document.getElementById('reg');
+
+            oReg.onclick=function (){
+             ajax({
+                     url:'/u',
+                     data:{
+                     act:'add',
+                     username:oUser.value,
+                     password:oPass.value
+                 },
+                 success:function (str){
+                     console.log(str);
+                     if (str=='用户已被注册请重新注册'){
+                         alert('用户名已被注册');
+                     }else {
+                         if(confirm("去登陆开启购物之旅")){
+                             window.location.href='index.html';
+                         }
+                     }
+                 },
+                 error:function (err){
+                     console.log(err);
+                 }
+             });
+            };
+        };
+    </script>
+</head>
+<body>
+<div class="login">
+    <div class="logo">
+        <h1><img src="images/logo.png"></h1>
+    </div>
+    <div class="login_content clearfix">
+        <div class="login_left">
+            <img src="images/login.jpg" alt="">
+        </div>
+        <div class="login_right">
+
+            <div class="login_mod_tab clearfix">
+                <div class="mod cg fl">
+                    <a href="javscript:;">新用户注册</a>
+                </div>
+            </div>
+            <div class="content">
+                <form action="" method="post">
+                    <div class="p">
+                        <input id="user" class="name" type="text" value="">
+                        <span>邮箱/手机号</span>
+                    </div>
+                    <div class="p">
+                        <input id="psd" class="psd" type="password" value="">
+                        <span>密码</span>
+                    </div>
+                    <div class="p" id="cuo" >
+                        <input class="name" type="text" value="" disabled>
+                        <span>用户名格式不正确</span>
+                    </div>
+                    <input type="button" value="注册" id="reg">
+                </form>
+                <div class="content_bottom">
+                    <div class="ck2">
+                        <input id="ck2" type="checkbox">
+                        <label for="ck2">我已阅读并且同意 <a href="javascript:;">《蘑菇街网络服务使用协议》</a></label>
+                        <a class="a3" href="javascript:;">已有帐号</a>
+                    </div>
+                </div>
+            </div><!--content结束-->
+        </div><!--login_right结束-->
+    </div><!--login_content结束-->
+    <div class="login_bottom clearfix">
+        <div class="clearfix">
+            <ul class="fl">
+                <li>
+                    <span>新手帮助</span>
+                    <a href="javascript:;">如何购买</a>
+                    <a href="javascript:;">支付教程</a>
+                    <a href="javascript:;">优惠券使用</a>
+                    <a href="javascript:;">常见问题</a>
+                </li>
+                <li>
+                    <span>权益保障</span>
+                    <a href="javascript:;">全国包邮</a>
+                    <a href="javascript:;">7天无理由退货</a>
+                    <a href="javascript:;">退货运费补贴</a>
+                    <a href="javascript:;">72小时发货</a>
+                </li>
+                <li>
+                    <span>商家服务</span>
+                    <a href="javascript:;">免费开店</a>
+                    <a href="javascript:;">商家社区</a>
+                    <a href="javascript:;">商家入驻</a>
+                    <a href="javascript:;">管理后台</a>
+                </li>
+            </ul>
+            <div class="app rg">
+                <span>蘑菇街移动客户端</span>
+            </div>
+        </div>
+        <div class="bottom">
+            <p>©Copyright 2010-2016蘑菇街 Mogujie.com (增值电信业务经营许可证：浙B2-20110349)</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
